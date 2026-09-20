@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),S=require('./dist/systems.js'),O=require('./dist/observatory-core.js'),W=require('./dist/world.js'),OW=require('./dist/observatory-world.js'),FW=require('./dist/frontier-world.js'),E=require('./dist/expansion-world.js');
+const seed={team:['Pip'],last:Date.now(),wood:80,crystals:20,berries:10};let s=S.clean(seed);assert.equal(s.observatory.stage,0);assert(!O.act(s,'finish'));assert(O.act(s,'talk'));assert(!O.act(s,'talk'));
+assert(O.act(s,'marker',0));assert(!O.act(s,'marker',0),'the same marker cannot be logged twice');assert(O.act(s,'marker',1));assert.equal(s.observatory.stage,1);s.frontier.gathered.crystals=100;assert(O.act(s,'marker',2));assert.equal(s.observatory.stage,2);
+assert(!O.act(s,'crystal'),'existing gathered crystals cannot skip the fresh objective');s.frontier.gathered.crystals+=12;assert(O.act(s,'crystal'));assert(O.act(s,'repair'));assert.equal(s.wood,40);assert.equal(s.crystals,8);assert(!O.act(s,'repair'));
+assert(!O.act(s,'friend'));s.team.push('Nova');assert(O.act(s,'friend'));const before=s.coins;assert(O.act(s,'finish'));assert(!O.act(s,'finish'));assert.equal(s.coins,before+100);assert(s.frontier.projects.observatory);assert.equal(s.observatory.stage,6);
+const savedRound=S.clean(s);assert(savedRound.team.includes('Nova'));assert.equal(savedRound.observatory.stage,6);
+const paid=S.clean({...seed,frontier:{projects:{observatory:true}},observatory:{stage:3}});assert(O.act(paid,'repair'));assert.equal(paid.wood,80,'old restoration costs are honoured');
+
+const w=OW.expand(FW.expand(E.expand(W.createWorld())));FW.apply(w,{lift:true});function bfs(m,start){const q=[start],seen=new Set;for(let i=0;i<q.length;i++){const[x,y]=q[i],k=x+','+y;if(seen.has(k)||W.blocked(m,x*32+16,y*32+16))continue;seen.add(k);for(const[a,b]of [[1,0],[-1,0],[0,1],[0,-1]])q.push([x+a,y+b]);}return seen;}
+const m=w.observatory,seen=bfs(m,[23,35]);for(const o of [...m.npcs,...m.objects.filter(o=>o.type.startsWith('observatory')||o.type==='landmark')])assert([...seen].some(k=>{const[x,y]=k.split(',').map(Number);return Math.hypot(x*32+16-o.x,y*32+16-o.y)<43}),o.type||o.name);
+console.log('PASS: observatory six-step quest, fresh gathering, one-time costs/rewards, marker tracking, legacy dome payment, eighth companion persistence, camp reachability.');
