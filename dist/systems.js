@@ -1,6 +1,6 @@
 (function(root){
 'use strict';
-const members=['Pip','Emberkin','Dewdrop','Lunamoth','Bramble','Talus','Fennel'],items=['berries','wood','fish','crystals'];
+const members=['Pip','Emberkin','Dewdrop','Lunamoth','Bramble','Talus','Fennel','Pearl'],items=['berries','wood','fish','crystals'];
 const crops={turnip:{name:'Sun turnip',seconds:90,yield:3},moonbean:{name:'Moon bean',seconds:180,yield:2}};
 const recipes={treat:{name:'Friendship treat',cost:{turnips:2,berries:2},item:'treats',amount:1},seeds:{name:'Turnip seeds × 3',cost:{berries:2},item:'seeds',amount:3},moonseeds:{name:'Moon-bean seeds × 2',cost:{crystals:1},item:'moonSeeds',amount:2},tool:{name:'Copper tool set',cost:{wood:15,crystals:4,coins:60},item:'tools',amount:1},lantern:{name:'Firefly lantern',cost:{wood:8,moonbeans:3},item:'lantern',amount:1}};
 function number(v,d=0,max=100000000){return typeof v==='number'&&Number.isFinite(v)?Math.max(0,Math.min(max,v)):d;}
@@ -27,6 +27,7 @@ function clean(raw,now=Date.now()){
  const oq=raw.orchard||{};s.orchard={stage:Math.floor(number(oq.stage,0,7)),herbStart:Math.floor(number(oq.herbStart)),water:Math.floor(number(oq.water,0,3)),beds:[...new Set((Array.isArray(oq.beds)?oq.beds:[]).filter(n=>Number.isInteger(n)&&n>=0&&n<3))]};
  const hq=raw.highlands||{};s.highlands={stage:Math.floor(number(hq.stage,0,6)),oreStart:Math.floor(number(hq.oreStart)),markers:[...new Set((Array.isArray(hq.markers)?hq.markers:[]).filter(n=>Number.isInteger(n)&&n>=0&&n<3))]};
  const mq=raw.marsh||{};s.marsh={stage:Math.floor(number(mq.stage,0,6)),herbStart:Math.floor(number(mq.herbStart)),markers:[...new Set((Array.isArray(mq.markers)?mq.markers:[]).filter(n=>Number.isInteger(n)&&n>=0&&n<3))]};
+ const cq=raw.coast||{};s.coast={stage:Math.floor(number(cq.stage,0,6)),shellStart:Math.floor(number(cq.shellStart)),markers:[...new Set((Array.isArray(cq.markers)?cq.markers:[]).filter(n=>Number.isInteger(n)&&n>=0&&n<3))]};
  return s;
 }
 function unpack(value){const v=typeof value==='string'?JSON.parse(value):value;if(v?.schema>2)throw Error('This save needs a newer version of Mosswild.');return clean(v?.schema===2?v.state:v);}

@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),S=require('./dist/systems.js'),C=require('./dist/coast-core.js'),W=require('./dist/world.js'),CW=require('./dist/coast-world.js'),FW=require('./dist/frontier-world.js'),E=require('./dist/expansion-world.js');
+const seed={team:['Pip'],last:Date.now(),wood:80,shells:20,berries:10};let s=S.clean(seed);assert.equal(s.coast.stage,0);assert(!C.act(s,'finish'));assert(C.act(s,'talk'));assert(!C.act(s,'talk'));
+assert(C.act(s,'marker',0));assert(!C.act(s,'marker',0),'the same marker cannot be logged twice');assert(C.act(s,'marker',1));assert.equal(s.coast.stage,1);s.frontier.gathered.shells=100;assert(C.act(s,'marker',2));assert.equal(s.coast.stage,2);
+assert(!C.act(s,'shell'),'existing gathered shells cannot skip the fresh objective');s.frontier.gathered.shells+=12;assert(C.act(s,'shell'));assert(C.act(s,'repair'));assert.equal(s.wood,40);assert.equal(s.shells,8);assert(!C.act(s,'repair'));
+assert(!C.act(s,'friend'));s.team.push('Pearl');assert(C.act(s,'friend'));const before=s.coins;assert(C.act(s,'finish'));assert(!C.act(s,'finish'));assert.equal(s.coins,before+100);assert(s.frontier.projects.harbour);assert.equal(s.coast.stage,6);
+const savedRound=S.clean(s);assert(savedRound.team.includes('Pearl'));assert.equal(savedRound.coast.stage,6);
+const paid=S.clean({...seed,frontier:{projects:{harbour:true}},coast:{stage:3}});assert(C.act(paid,'repair'));assert.equal(paid.wood,80,'old restoration costs are honoured');
+
+const w=CW.expand(FW.expand(E.expand(W.createWorld())));FW.apply(w,{harbour:true});function bfs(m,start){const q=[start],seen=new Set;for(let i=0;i<q.length;i++){const[x,y]=q[i],k=x+','+y;if(seen.has(k)||W.blocked(m,x*32+16,y*32+16))continue;seen.add(k);for(const[a,b]of [[1,0],[-1,0],[0,1],[0,-1]])q.push([x+a,y+b]);}return seen;}
+const m=w.coast,seen=bfs(m,[23,2]);for(const o of [...m.npcs,...m.objects.filter(o=>o.type.startsWith('coast')||o.type==='landmark')])assert([...seen].some(k=>{const[x,y]=k.split(',').map(Number);return Math.hypot(x*32+16-o.x,y*32+16-o.y)<43}),o.type||o.name);
+console.log('PASS: coast six-step quest, fresh gathering, one-time costs/rewards, marker tracking, legacy harbour payment, seventh companion persistence, camp reachability.');
