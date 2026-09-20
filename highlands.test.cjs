@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),S=require('./dist/systems.js'),H=require('./dist/highlands-core.js'),W=require('./dist/world.js'),HW=require('./dist/highlands-world.js'),FW=require('./dist/frontier-world.js'),E=require('./dist/expansion-world.js');
+const seed={team:['Pip'],last:Date.now(),wood:80,ore:20,berries:10};let s=S.clean(seed);assert.equal(s.highlands.stage,0);assert(!H.act(s,'finish'));assert(H.act(s,'talk'));assert(!H.act(s,'talk'));
+assert(H.act(s,'marker',0));assert(!H.act(s,'marker',0),'the same marker cannot be logged twice');assert(H.act(s,'marker',1));assert.equal(s.highlands.stage,1);s.frontier.gathered.ore=100;assert(H.act(s,'marker',2));assert.equal(s.highlands.stage,2);
+assert(!H.act(s,'ore'),'existing gathered ore cannot skip the fresh objective');s.frontier.gathered.ore+=12;assert(H.act(s,'ore'));assert(H.act(s,'repair'));assert.equal(s.wood,40);assert.equal(s.ore,8);assert(!H.act(s,'repair'));
+assert(!H.act(s,'friend'));s.team.push('Talus');assert(H.act(s,'friend'));const before=s.coins;assert(H.act(s,'finish'));assert(!H.act(s,'finish'));assert.equal(s.coins,before+100);assert(s.frontier.projects.lift);assert.equal(s.highlands.stage,6);
+const savedRound=S.clean(s);assert(savedRound.team.includes('Talus'));assert.equal(savedRound.highlands.stage,6);
+const paid=S.clean({...seed,frontier:{projects:{lift:true}},highlands:{stage:3}});assert(H.act(paid,'repair'));assert.equal(paid.wood,80,'old restoration costs are honoured');
+
+const w=HW.expand(FW.expand(E.expand(W.createWorld())));FW.apply(w,{});function bfs(m,start){const q=[start],seen=new Set;for(let i=0;i<q.length;i++){const[x,y]=q[i],k=x+','+y;if(seen.has(k)||W.blocked(m,x*32+16,y*32+16))continue;seen.add(k);for(const[a,b]of [[1,0],[-1,0],[0,1],[0,-1]])q.push([x+a,y+b]);}return seen;}
+const m=w.highlands,seen=bfs(m,[23,36]);for(const o of [...m.npcs,...m.objects.filter(o=>o.type.startsWith('highlands')||o.type==='landmark')])assert([...seen].some(k=>{const[x,y]=k.split(',').map(Number);return Math.hypot(x*32+16-o.x,y*32+16-o.y)<43}),o.type||o.name);
+console.log('PASS: highlands six-step quest, fresh gathering, one-time costs/rewards, marker tracking, legacy lift payment, fifth companion persistence, camp reachability.');
