@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "node build.cjs",
-    "test": "node movement.test.cjs && node expansion.test.cjs && node systems.test.cjs && node server.test.cjs && node save.test.cjs && node release.test.cjs && node frontier.test.cjs",
+    "test": "node movement.test.cjs && node expansion.test.cjs && node systems.test.cjs && node server.test.cjs && node save.test.cjs && node release.test.cjs && node frontier.test.cjs && node orchard.test.cjs",
     "preview": "node preview.cjs",
     "db:generate": "drizzle-kit generate"
   },
