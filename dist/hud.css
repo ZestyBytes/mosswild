@@ -3,4 +3,21 @@
 
 .world-chart{max-width:380px;margin:auto}.world-chart svg{display:block;width:100%;max-height:51dvh}.map-caption{text-align:center;font-size:13px!important}
 
+/* Icon-led modal cards, matching the resource-rail/dock visual language. */
+.dialog .actions button{display:inline-flex;align-items:center;justify-content:center;gap:7px}.dialog .actions button svg{width:20px;height:20px;flex-shrink:0;filter:drop-shadow(0 1px 1px #23181811)}
+.icon-stats{grid-template-columns:repeat(4,minmax(0,1fr))}.icon-stats>div{display:grid;justify-items:center;gap:2px}.icon-stats svg{width:34px;height:34px;margin-bottom:-4px}
+.coin-line{display:flex;align-items:center;gap:6px}.coin-line svg{width:22px;height:22px;flex-shrink:0}
+.chapter.card,.row.card{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid #a6a47c55}
+.chapter.card .card-icon,.row.card .card-icon{flex-shrink:0;width:44px;height:44px;display:grid;place-items:center;border:2px solid #a4824b;border-radius:11px;background:linear-gradient(#efdb9f,#c4a166);box-shadow:inset 0 1px #fff4d488}
+.chapter.card .card-icon svg,.row.card .card-icon svg{width:30px;height:30px}
+.chapter.card .card-body,.row.card>div:not(.card-icon){flex:1;min-width:0}
+.chapter.card .card-body>b,.chapter.card .card-body>small{display:block}
+.chapter.card .card-body>small{font-size:10px;letter-spacing:1.4px;color:#657152;margin-bottom:7px;display:flex;align-items:center;gap:4px}
+.chapter.card .card-body>small svg{width:14px;height:14px}
+.chapter.card .card-body p{margin:8px 0 12px}
+.chapter.card.done{opacity:.65}
+.chapter.card .card-body button{min-height:44px}
+.badge-done{display:inline-flex;align-items:center;gap:5px;color:#3d6b3f;font-weight:bold}.badge-done svg{width:18px;height:18px}
+.row.card select{align-self:center}
+
 @media(max-height:500px) and (min-width:600px) and (max-width:720px){.game-dock{max-width:270px}.sprint{bottom:108px!important;right:38px!important}}
