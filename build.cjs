@@ -1,0 +1,10 @@
+const fs=require('node:fs'),path=require('node:path');
+const root=__dirname,dist=path.join(root,'dist');
+const names=['index.html','play.css','mobile.css','life.css','hud.css','world.js','expansion-world.js','audio.js','systems.js','save.js','play.js','interaction.js','expansion.js','life.js','art.js','hud.js'];
+const assets=Object.fromEntries(names.map(n=>['/'+n,fs.readFileSync(path.join(dist,n),'utf8')]));assets['/']=assets['/index.html'];
+const api=fs.readFileSync(path.join(root,'server.mjs'),'utf8').replace('export async function api','async function api');
+const systems=fs.readFileSync(path.join(dist,'systems.js'),'utf8').replace("if(typeof module!=='undefined')module.exports=api;else root.MossSystems=api;","root.MossSystems=api;");
+const worker=`${systems}\n${api}\nconst assets=${JSON.stringify(assets)};\nexport default {async fetch(request,env){const p=new URL(request.url).pathname;if(p==='/api/save')return api(request,env,MossSystems.clean);if(!['GET','HEAD'].includes(request.method))return new Response('Method not allowed',{status:405});const body=assets[p];if(body===undefined)return new Response('Not found',{status:404});return new Response(request.method==='HEAD'?null:body,{headers:{'Content-Type':p.endsWith('.js')?'application/javascript; charset=utf-8':p.endsWith('.css')?'text/css; charset=utf-8':'text/html; charset=utf-8','Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'}})}};`;
+fs.mkdirSync(path.join(dist,'server'),{recursive:true});fs.writeFileSync(path.join(dist,'server/index.js'),worker);
+fs.mkdirSync(path.join(dist,'.openai'),{recursive:true});fs.copyFileSync(path.join(root,'.openai/hosting.json'),path.join(dist,'.openai/hosting.json'));fs.cpSync(path.join(root,'drizzle'),path.join(dist,'.openai/drizzle'),{recursive:true});
+console.log('Built game, authenticated save API and migrations.');

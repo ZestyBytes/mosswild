@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),{DatabaseSync}=require('node:sqlite'),S=require('./dist/systems.js');
+(async()=>{const {api}=await import('./server.mjs'),sqlite=new DatabaseSync(':memory:');sqlite.exec(fs.readFileSync('drizzle/'+fs.readdirSync('drizzle').find(n=>n.endsWith('.sql')),'utf8'));const DB={prepare(sql){return {bind(...args){const stmt=sqlite.prepare(sql);return {first:async()=>stmt.get(...args)||null,run:async()=>({meta:{changes:stmt.run(...args).changes}})};}}}};
+const state=S.clean({team:['Pip'],last:Date.now(),coins:80}),req=(method,user,body)=>new Request('https://mosswild.test/api/save',{method,headers:{...(user?{'oai-authenticated-user-id':user}:{}),'content-type':'application/json'},body:body?JSON.stringify({...body,account:user}):undefined});
+assert.equal((await api(req('GET'),{DB},S.clean)).status,401);assert.equal((await api(req('PUT','alice',{revision:0,state:{}}),{DB},S.clean)).status,400);
+let r=await api(req('PUT','alice',{revision:0,state}),{DB},S.clean);assert.equal(r.status,200);assert.equal((await r.json()).revision,1);
+r=await api(req('GET','bob'),{DB},S.clean);assert.equal((await r.json()).save,null);
+r=await api(req('PUT','alice',{revision:0,state:{...state,coins:999}}),{DB},S.clean);assert.equal(r.status,409);assert.equal((await r.json()).save.coins,80);
+r=await api(req('PUT','alice',{revision:1,state:{...state,coins:90}}),{DB},S.clean);assert.equal(r.status,200);assert.equal((await r.json()).revision,2);
+assert.equal(JSON.parse(sqlite.prepare('SELECT previous FROM saves WHERE user_id=?').get('alice').previous).coins,80);
+const cross=req('PUT','alice',{revision:2,state});cross.headers.set('Origin','https://evil.test');assert.equal((await api(cross,{DB},S.clean)).status,403);
+assert.equal((await api(req('PUT','alice',{revision:2,state,padding:'x'.repeat(100001)}),{DB},S.clean)).status,413);
+const races=await Promise.all([api(req('PUT','alice',{revision:2,state}),{DB},S.clean),api(req('PUT','alice',{revision:2,state}),{DB},S.clean)]);assert.deepEqual(races.map(r=>r.status).sort(),[200,409]);
+sqlite.close();console.log('PASS: generated migration, authentication, account isolation, validation, bounded payloads, origin protection, concurrent save conflicts and prior-cloud snapshot.');})().catch(e=>{console.error(e);process.exitCode=1});

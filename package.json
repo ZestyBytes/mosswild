@@ -1,0 +1,14 @@
+{
+  "name": "mosswild",
+  "private": true,
+  "scripts": {
+    "build": "node build.cjs",
+    "test": "node movement.test.cjs && node expansion.test.cjs && node systems.test.cjs && node server.test.cjs && node save.test.cjs",
+    "preview": "node preview.cjs",
+    "db:generate": "drizzle-kit generate"
+  },
+  "devDependencies": {
+    "drizzle-kit": "0.31.4",
+    "drizzle-orm": "0.45.2"
+  }
+}
