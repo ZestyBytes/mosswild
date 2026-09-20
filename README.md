@@ -2,9 +2,13 @@
 
 A small, playable canvas game about exploring a valley, befriending creatures, farming and returning to idle progress. The canonical working project is C:\Users\Jamie Bassett\Dev\mosswild.
 
+## Deployment
+
+The live game is https://zestybytes.github.io/mosswild/. Push finished changes to main; the GitHub Pages workflow runs the test suite before uploading dist/. The GitHub Pages release uses device-local saves and downloaded backups. It cannot execute the older Sites Worker or D1 API. Export/import is required to move an adventure from the former address. See NEXT-STEPS.md for the separate cloud-backend milestone. Draft frontier regions are preserved in source but not loaded in the release.
+
 ## Play locally
 
-Run `npm run preview`, then open http://127.0.0.1:4173. The local preview saves on this device. The hosted private Site additionally backs up to the signed-in account; local and hosted origins have separate adventures. Use Saves > Download backup / Restore a backup to transfer one deliberately.
+Run `npm run preview`, then open http://127.0.0.1:4173. The local preview saves on this device. The older private Sites deployment additionally backs up to its signed-in account; that backend is not connected to the GitHub Pages release. Different origins have separate adventures. Use Saves > Download backup / Restore a backup to transfer one deliberately.
 
 Move with WASD/arrows, the touch joystick, or a standard gamepad. E/Space or controller A interacts; Shift/controller B runs; touch Run toggles sprint. I opens the bag, M opens the world guide. Dialogs support keyboard focus and gamepad D-pad/A/B.
 
