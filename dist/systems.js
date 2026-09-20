@@ -41,7 +41,7 @@ const chapters=[
  ['A growing bond','Feed a treat to a companion or gather together until any friend reaches level 2.',s=>s.team.some(n=>level(s,n)>=2),30],
  ['Across the water','Bring Emberkin and 12 wood to the broken bridge at the east edge of the meadow.',s=>s.exploration.bridge,40],
  ['A light in the dark','Befriend Lunamoth in the northern grove. Open the riverbank cavern and rekindle its beacon.',s=>s.exploration.beacon,60],
- ['Everyone has a home','Befriend all four companions, trade fish with Nell and improve your camp to level 2.',s=>s.team.length>=4&&s.exploration.nell&&s.upgrade>=2,100]
+ ['Everyone has a home','Befriend all four companions, trade fish with Nell and improve your camp to level 2.',s=>['Pip','Emberkin','Dewdrop','Lunamoth'].every(n=>s.team.includes(n))&&s.exploration.nell&&s.upgrade>=2,100]
 ];
 function claim(s,i){if(!Number.isInteger(i)||!chapters[i]||s.life.claimed.includes(i)||!chapters[i][2](s)||chapters.slice(0,i).some((_,n)=>!s.life.claimed.includes(n)))return false;s.coins+=chapters[i][3];s.life.claimed.push(i);return true;}
 const api={members,items,crops,recipes,clean,unpack,level,grow,plant,harvest,craft,chapters,claim};if(typeof module!=='undefined')module.exports=api;else root.MossSystems=api;

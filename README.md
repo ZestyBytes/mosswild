@@ -14,9 +14,9 @@ Move with WASD/arrows, the touch joystick, or a standard gamepad. E/Space or con
 
 ## What's playable
 
-- Twelve connected areas, including Bramble Orchard, Copper Highlands, Fernwater Marsh, Tideglass Coast and Starlight Plateau. Original areas: valley, meadow, grove, two interiors, riverbank and cavern. Repair the bridge with Emberkin and 12 wood; ask Lunamoth to open the cavern; spend five crystals to restore its beacon.
+- Thirteen connected areas, including Bramble Orchard, Copper Highlands, Fernwater Marsh, Tideglass Coast and Starlight Plateau. Original areas: valley, meadow, grove, two interiors, riverbank and cavern. Repair the bridge with Emberkin and 12 wood; ask Lunamoth to open the cavern; spend five crystals to restore its beacon.
 - Eight journal chapters with single-use rewards, Mara's guidance, Nell's fish request and a hidden supplies chest.
-- Four distinct creature encounters. Select a travelling companion from Friends. Gathering grants 12 bond XP; treats grant 50. Every 100 XP earns a level, capped at 10. Level 2 adds one item for the companion's speciality.
+- Five companions, including the hidden orchard companion Bramble. Select a travelling companion from Friends. Gathering grants 12 bond XP; treats grant 50. Every 100 XP earns a level, capped at 10. Level 2 adds one item for the companion's speciality.
 - Six growing beds south of the homestead: sun turnips take 90 seconds and moon beans take three minutes. Watering reduces growing time by 35%; rain waters planted crops. Plants mature while away. Harvest at the bed, then craft inside the homestead.
 - Workbench recipes for friendship treats, two seed types, tools (+1 gathered item) and a lantern. Camp upgrades improve companion idle jobs.
 - A 12-minute day cycle, rain every third day, night lighting and simple time/weather-based routines for Mara and Nell.
@@ -52,3 +52,11 @@ Five regional NPCs offer repeatable fresh-gather commissions. Deliveries earn tr
 Companion expeditions last 5, 20 or 60 minutes. They pause normal idle work for the expedition duration, and rewards wait until collected. The travelling companion cannot be dispatched. Existing saves gain these systems without losing inventory or completed chapters.
 
 Bag, Tasks, Friends, Workshop and Map use visual cards and category tabs. Camp includes a free hair/coat/hat selector and a redesigned four-direction traveller. The top resource HUD remains familiar; the bottom dock has consistent styling.
+
+## Bramble Orchard adventure
+
+Travel west from Willowmere, then follow the northern bend to Tessa’s cottage. Her seven-step story leads through a notebook discovery, fresh herb gathering, a nursery repair, watering three beds, and a hidden Bramble encounter on the southern trail. Finishing restores the nursery permanently, opens the marsh trail, adds +1 crop per harvest, and awards 100 coins, three trail marks and six seeds. Prior nursery payments are honoured.
+
+The orchard has a stream with two crossings, winding paths, apple trees, flower patches, an enterable cottage and three nursery appearances. Tessa, Bramble, the cottage, apple trees, well and nursery share the rounded-pixel art direction. Bramble joins normal companion jobs, expeditions and bonding; at level 2 it adds one wild herb while travelling. Other regions retain their current artwork.
+
+Run `node qa-orchard.cjs` for disposable local browser fixtures on port 4176. The named scene URLs seed this isolated test origin; they never affect the live game. Do not deploy that server.

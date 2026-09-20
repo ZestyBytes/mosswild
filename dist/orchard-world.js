@@ -19,12 +19,15 @@ function expand(w){
  for(const[x,y]of [[5,15],[8,26],[28,14],[40,18],[36,29]])add('berries',x,y);
  for(const[x,y]of [[7,22],[26,16],[35,25],[39,30],[13,30]])add('herb',x,y);
  for(const[x,y]of [[6,20],[29,23]])add('log',x,y);
- add('landmark',11,12,{region:'orchard'});add('trailboard',28,19);add('trailgate',1,19,{gate:'marsh'});add('campfire',25,22);
+ rect(10,10,3,3,'building');add('landmark',11,12,{region:'orchard'});add('trailboard',28,19);add('trailgate',1,19,{gate:'marsh'});add('campfire',25,22);
  add('sign',44,17,{text:'BRAMBLE ORCHARD\nTessa’s cottage: follow the northern bend. Nursery: across the stream.'});
  add('sign',28,30,{text:'THE QUIET CLEARING\nTiny pawprints disappear beneath the berry bushes.'});
  add('orchardJournal',34,14);add('orchardWell',12,23);
  for(let i=0;i<3;i++)add('orchardBed',8+i*3,15,{bed:i});
  add('orchardNest',39,33);
+ for(const[x,y]of [[7,13],[15,14],[8,17],[14,17],[29,12],[37,12],[37,31],[41,31],[6,27],[30,26]])add('wildflowers',x,y);
+ for(const y of [8,12,16,23,26,32])add('reeds',17,y);
+ for(const[x,y]of [[4,6],[10,4],[14,6],[4,33],[9,35],[27,9],[43,13],[44,28],[37,35],[43,35]])add('tree',x,y,{solid:true,apple:true});
  return w;
 }
 const api={expand};if(typeof module!=='undefined')module.exports=api;else{root.OrchardWorld=api;const base=root.World.createWorld;root.World.createWorld=()=>expand(base());}
