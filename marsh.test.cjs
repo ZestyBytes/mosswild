@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),S=require('./dist/systems.js'),M=require('./dist/marsh-core.js'),W=require('./dist/world.js'),MW=require('./dist/marsh-world.js'),FW=require('./dist/frontier-world.js'),E=require('./dist/expansion-world.js');
+const seed={team:['Pip'],last:Date.now(),wood:80,herbs:20,berries:10};let s=S.clean(seed);assert.equal(s.marsh.stage,0);assert(!M.act(s,'finish'));assert(M.act(s,'talk'));assert(!M.act(s,'talk'));
+assert(M.act(s,'marker',0));assert(!M.act(s,'marker',0),'the same post cannot be logged twice');assert(M.act(s,'marker',1));assert.equal(s.marsh.stage,1);s.frontier.gathered.herbs=100;assert(M.act(s,'marker',2));assert.equal(s.marsh.stage,2);
+assert(!M.act(s,'herb'),'existing gathered herbs cannot skip the fresh objective');s.frontier.gathered.herbs+=12;assert(M.act(s,'herb'));assert(M.act(s,'repair'));assert.equal(s.wood,40);assert.equal(s.herbs,8);assert(!M.act(s,'repair'));
+assert(!M.act(s,'friend'));s.team.push('Fennel');assert(M.act(s,'friend'));const before=s.coins;assert(M.act(s,'finish'));assert(!M.act(s,'finish'));assert.equal(s.coins,before+100);assert(s.frontier.projects.boardwalk);assert.equal(s.marsh.stage,6);
+const savedRound=S.clean(s);assert(savedRound.team.includes('Fennel'));assert.equal(savedRound.marsh.stage,6);
+const paid=S.clean({...seed,frontier:{projects:{boardwalk:true}},marsh:{stage:3}});assert(M.act(paid,'repair'));assert.equal(paid.wood,80,'old restoration costs are honoured');
+
+const w=MW.expand(FW.expand(E.expand(W.createWorld())));FW.apply(w,{nursery:true});function bfs(m,start){const q=[start],seen=new Set;for(let i=0;i<q.length;i++){const[x,y]=q[i],k=x+','+y;if(seen.has(k)||W.blocked(m,x*32+16,y*32+16))continue;seen.add(k);for(const[a,b]of [[1,0],[-1,0],[0,1],[0,-1]])q.push([x+a,y+b]);}return seen;}
+const m=w.marsh,seen=bfs(m,[45,19]);for(const o of [...m.npcs,...m.objects.filter(o=>o.type.startsWith('marsh')||o.type==='landmark')])assert([...seen].some(k=>{const[x,y]=k.split(',').map(Number);return Math.hypot(x*32+16-o.x,y*32+16-o.y)<43}),o.type||o.name);
+console.log('PASS: marsh six-step quest, fresh gathering, one-time costs/rewards, post tracking, legacy boardwalk payment, sixth companion persistence, camp reachability.');
