@@ -19,7 +19,7 @@ function clean(raw,now=Date.now()){
  s.life.claimed=[...new Set((Array.isArray(r.claimed)?r.claimed:[]).filter(n=>Number.isInteger(n)&&n>=0&&n<8))];
  s.life.visits=[...new Set((Array.isArray(r.visits)?r.visits:[]).filter(n=>['valley','meadow','grove','home','cottage','riverbank','cavern','orchard','highlands','marsh','coast','observatory'].includes(n))) ];
  const f=raw.frontier||{};s.frontier={marks:Math.floor(number(f.marks)),completed:Math.floor(number(f.completed)),research:Math.floor(number(f.research)),projects:{},gathered:{},orders:{},trips:{},story:[],avatar:{hair:Math.floor(number(f.avatar?.hair,0,3)),coat:Math.floor(number(f.avatar?.coat,0,3)),hat:f.avatar?.hat===true}};
- for(const k of ['marsh','coast','observatory'])s.frontier.projects[k]=f.projects?.[k]===true;
+ for(const k of ['nursery','lift','harbour','boardwalk','observatory'])s.frontier.projects[k]=f.projects?.[k]===true;
  for(const k of ['berries','wood','fish','crystals','herbs','ore','shells'])s.frontier.gathered[k]=Math.floor(number(f.gathered?.[k]));
  for(const id of ['orchard','highlands','marsh','coast','observatory']){const o=f.orders?.[id];if(o&&Number.isInteger(o.tier)&&o.tier>=0&&o.tier<=10000){const start={};for(const k of ['berries','wood','fish','crystals','herbs','ore','shells'])start[k]=Math.floor(number(o.start?.[k]));s.frontier.orders[id]={tier:o.tier,start};}}
  for(const n of s.team){const trip=f.trips?.[n];if(trip&&[300,1200,3600].includes(trip.duration))s.frontier.trips[n]={start:number(trip.start,now,now),duration:trip.duration};}

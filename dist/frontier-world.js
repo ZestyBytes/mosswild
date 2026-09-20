@@ -8,7 +8,7 @@ for(const[x,y]of [[12,16],[33,22],[18,29],[29,10]])add(m,'berries',x,y);for(cons
 const specialty={orchard:'herb',highlands:'ore',marsh:'herb',coast:'shell',observatory:'crystals'}[id];for(const[x,y]of [[16,12],[30,14],[15,27],[31,29],[36,10]])add(m,specialty,x,y);
 add(m,'trailboard',20,17);add(m,'campfire',26,23);add(m,'landmark',24,11,{region:id});
 const names={orchard:'Tessa',highlands:'Rowan',marsh:'Iris',coast:'Kai',observatory:'Sage'};m.npcs.push({name:names[id],kind:'human',x:24*T+16,y:17*T+16});
-if(['marsh','coast'].includes(id)){rect(m,width-8,3,6,height-6,'water');for(const y of [10,25,33]){add(m,'fish',width-9,y);add(m,'reeds',width-9,y-2);}rect(m,width-9,18,1,3,'sand');}
+if(['marsh','coast'].includes(id)){rect(m,width-8,3,6,height-6,'water');for(const y of [10,25,33]){add(m,'fish',width-9,y);add(m,'reeds',width-9,y-2);}rect(m,width-9,18,1,3,'sand');if(id==='marsh')rect(m,width-9,18,9,3,'bridgefloor');}
 if(id==='orchard'){for(const[x,y]of [[8,8],[13,8],[8,29],[36,29],[36,6]]){add(m,'tree',x,y,{solid:true});add(m,'berries',x+1,y+1);}}
 }
 exit(w.valley,0,15,1,3,'orchard',45,19);exit(w.orchard,47,18,1,3,'valley',2,16);
@@ -20,6 +20,6 @@ add(w.orchard,'trailgate',1,19,{gate:'marsh'});add(w.riverbank,'trailgate',20,30
 add(w.valley,'sign',2,14,{text:'← BRAMBLE ORCHARD\nTessa is restoring the old frontier trails.'});add(w.grove,'sign',18,3,{text:'↑ COPPER HIGHLANDS\nRowan has opened a new surveying camp.'});
 return w;
 }
-function apply(w,progress={}){for(const [area,gate,x,y,a,b]of [['orchard','marsh',0,18,1,3],['riverbank','coast',19,31,3,1],['highlands','observatory',22,0,3,1]])for(let j=y;j<y+b;j++)for(let i=x;i<x+a;i++)w[area].tiles[j][i]=progress[gate]?'path':'building';}
+function apply(w,progress={}){for(const [area,gate,x,y,a,b]of [['orchard','marsh',0,18,1,3],['riverbank','coast',19,31,3,1],['highlands','observatory',22,0,3,1]])for(let j=y;j<y+b;j++)for(let i=x;i<x+a;i++)w[area].tiles[j][i]=progress[{marsh:'nursery',coast:'harbour',observatory:'lift'}[gate]]?'path':'building';}
 const api={regions,expand,apply};if(typeof module!=='undefined')module.exports=api;else{root.FrontierWorld=api;const base=root.World.createWorld;root.World.createWorld=()=>expand(base());}
 })(globalThis);

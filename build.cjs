@@ -1,6 +1,6 @@
 const fs=require('node:fs'),path=require('node:path');
 const root=__dirname,dist=path.join(root,'dist');
-const names=['index.html','play.css','mobile.css','life.css','hud.css','world.js','expansion-world.js','audio.js','systems.js','save.js','play.js','interaction.js','expansion.js','life.js','art.js','hud.js'];
+const names=['index.html','play.css','mobile.css','life.css','hud.css','frontier.css','world.js','expansion-world.js','frontier-world.js','frontier-core.js','audio.js','systems.js','save.js','play.js','interaction.js','expansion.js','life.js','art.js','hud.js','frontier.js'];
 const assets=Object.fromEntries(names.map(n=>['/'+n,fs.readFileSync(path.join(dist,n),'utf8')]));assets['/']=assets['/index.html'];
 const api=fs.readFileSync(path.join(root,'server.mjs'),'utf8').replace('export async function api','async function api');
 const systems=fs.readFileSync(path.join(dist,'systems.js'),'utf8').replace("if(typeof module!=='undefined')module.exports=api;else root.MossSystems=api;","root.MossSystems=api;");

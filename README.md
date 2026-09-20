@@ -4,7 +4,7 @@ A small, playable canvas game about exploring a valley, befriending creatures, f
 
 ## Deployment
 
-The live game is https://zestybytes.github.io/mosswild/. Push finished changes to main; the GitHub Pages workflow runs the test suite before uploading dist/. The GitHub Pages release uses device-local saves and downloaded backups. It cannot execute the older Sites Worker or D1 API. Export/import is required to move an adventure from the former address. See NEXT-STEPS.md for the separate cloud-backend milestone. Draft frontier regions are preserved in source but not loaded in the release.
+The live game is https://zestybytes.github.io/mosswild/. Push finished changes to main; the GitHub Pages workflow runs the test suite before uploading dist/. The GitHub Pages release uses device-local saves and downloaded backups. It cannot execute the older Sites Worker or D1 API. Export/import is required to move an adventure from the former address. See NEXT-STEPS.md for the separate cloud-backend milestone. The frontier expansion is included in this release.
 
 ## Play locally
 
@@ -14,14 +14,14 @@ Move with WASD/arrows, the touch joystick, or a standard gamepad. E/Space or con
 
 ## What's playable
 
-- Seven connected areas: valley, meadow, grove, two interiors, riverbank and cavern. Repair the bridge with Emberkin and 12 wood; ask Lunamoth to open the cavern; spend five crystals to restore its beacon.
+- Twelve connected areas, including Bramble Orchard, Copper Highlands, Fernwater Marsh, Tideglass Coast and Starlight Plateau. Original areas: valley, meadow, grove, two interiors, riverbank and cavern. Repair the bridge with Emberkin and 12 wood; ask Lunamoth to open the cavern; spend five crystals to restore its beacon.
 - Eight journal chapters with single-use rewards, Mara's guidance, Nell's fish request and a hidden supplies chest.
-- Four distinct creature encounters. Select a travelling companion from Bag > Companions. Gathering grants 12 bond XP; treats grant 50. Every 100 XP earns a level, capped at 10. Level 2 adds one item for the companion's speciality.
+- Four distinct creature encounters. Select a travelling companion from Friends. Gathering grants 12 bond XP; treats grant 50. Every 100 XP earns a level, capped at 10. Level 2 adds one item for the companion's speciality.
 - Six growing beds south of the homestead: sun turnips take 90 seconds and moon beans take three minutes. Watering reduces growing time by 35%; rain waters planted crops. Plants mature while away. Harvest at the bed, then craft inside the homestead.
 - Workbench recipes for friendship treats, two seed types, tools (+1 gathered item) and a lantern. Camp upgrades improve companion idle jobs.
 - A 12-minute day cycle, rain every third day, night lighting and simple time/weather-based routines for Mara and Nell.
 - Original cached pixel sprites for characters, companions, houses, trees, resources, furniture and crops; proximity labels and an illustrated field guide in Menu.
-- Original procedural 72 BPM background music and interaction sounds. Music is opt-in and pauses when backgrounded.
+- Four original procedural themes with 32-bar arrangements, area/night selection, quiet passages and track selection. Separate music and wind/water/bird ambience levels. Audio pauses when backgrounded. Music is opt-in.
 
 ## Saves
 
@@ -44,3 +44,11 @@ Automated suites and browser checks cover phone layouts, garden actions, resourc
 ## Mobile HUD pass
 
 The exploration screen uses a compact icon/count resource strip, explorer level badge, Tasks badge and five-tab illustrated dock. Location details, saving, audio and instructions live in panels. Touch actions show one verb without keyboard/controller abbreviations. Companion world sprites are 62% of their previous dimensions, keeping them below human height. Buildings and UI share a timber/parchment/teal palette. The Map tab now opens a visual area map.
+
+## Frontier progression update
+
+Five regional NPCs offer repeatable fresh-gather commissions. Deliveries earn trail marks and reputation; ranks 2 and 3 unlock longer companion expeditions. Five restoration projects consume both familiar and new materials, visibly repair landmarks, unlock routes and improve gathering or harvests. Herbs, copper ore and tide shells have dedicated inventory slots.
+
+Companion expeditions last 5, 20 or 60 minutes. They pause normal idle work for the expedition duration, and rewards wait until collected. The travelling companion cannot be dispatched. Existing saves gain these systems without losing inventory or completed chapters.
+
+Bag, Tasks, Friends, Workshop and Map use visual cards and category tabs. Camp includes a free hair/coat/hat selector and a redesigned four-direction traveller. The top resource HUD remains familiar; the bottom dock has consistent styling.
