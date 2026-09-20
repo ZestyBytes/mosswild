@@ -12,4 +12,7 @@ s.frontier.completed=2;assert(F.accept(s,'orchard'));assert.equal(s.frontier.ord
 s.frontier.completed=3;assert(F.accept(s,'orchard'));assert.equal(s.frontier.orders.orchard.kind,'craft');assert(!F.deliver(s,'orchard'));s.life.crafted+=2;assert(F.deliver(s,'orchard'),'a craft request completes from crafting alone');
 s.frontier.completed=4;assert(F.accept(s,'orchard'));assert.equal(s.frontier.orders.orchard.kind,'gather','the rotation returns to gathering every fourth request');
 
+// A save round-trip must not silently revert a farm/discover/craft order back to gathering.
+delete s.frontier.orders.orchard;s.frontier.completed=1;assert(F.accept(s,'orchard'));const roundTripped=S.unpack({schema:2,state:s});assert.equal(roundTripped.frontier.orders.orchard.kind,'farm');assert.equal(roundTripped.frontier.orders.orchard.start.harvested,s.frontier.orders.orchard.start.harvested);
+
 console.log('PASS: all five new region exits/resources reachable; restoration gates; fresh-gather commissions and one-time delivery; persistent projects; expedition job overlap and one-time rewards; save round-trip; farm/discover/craft request variety.');
