@@ -14,3 +14,5 @@ const bad=harness({'mosswild-save-v2':'broken'});assert(bad.run('SaveStore.statu
 console.log('PASS: crop growth/harvest, recipe costs, companion levels, one-time chapter rewards, migration/validation, 8-hour away cap, full game loading/rendering, recovery and quota failures.');
 
 
+
+assert.equal(S.clean(seed,now).frontier.avatar.style,'rounded');assert.equal(S.clean({...seed,frontier:{avatar:{style:'classic'}}},now).frontier.avatar.style,'classic');
