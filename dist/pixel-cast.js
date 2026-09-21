@@ -1,0 +1,6 @@
+'use strict';
+const pixelCreature=creature;creature=function(x,y,name,walk=0){const actual=name==='Pip'?state.life.active:name;const direction=name==='Pip'?player.dir:walk?2:0;if(drawCompanionPixels(ctx,actual,x,y,22,direction,walk))return;pixelCreature(x,y,name,walk);};
+const pixelPortraits=portraits;portraits=function(){pixelPortraits();if(!CompanionPixels.ready)return;for(const c of document.querySelectorAll('[data-friend-art]')){const g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);drawCompanionPixels(g,c.dataset.friendArt,c.width/2,c.height-8,60);}};
+const pixelEncounter=encounterDialog;encounterDialog=function(){pixelEncounter();if(encounter&&CompanionPixels.ready){const c=document.getElementById('portrait'),g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);drawCompanionPixels(g,encounter.name,c.width/2,c.height-2,c.height-4);}};
+const pixelObject=object;object=function(o){if(o.type==='orchardNest'&&state.orchard.stage>=5&&!state.team.includes('Bramble')&&drawCompanionPixels(ctx,'Bramble',o.x,o.y,22))return;pixelObject(o);};
+document.addEventListener('mosswild-art-ready',()=>{if(document.querySelector('[data-friend-art]'))portraits();if(document.getElementById('rounded-preview')){const c=document.getElementById('rounded-preview'),g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);RoundedArt.draw(g,80,145,0,0,false,126);}});
