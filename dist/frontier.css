@@ -3,3 +3,6 @@
 .score-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.score-list button{font-size:12px}.score-list [aria-pressed=true]{background:#80aa89!important}
 
 [data-panel="orchard"] .story-feature{clear:both;margin-top:18px}[data-panel="orchard"] .portrait{width:80px;height:80px;image-rendering:pixelated}[data-orchard="guide"]{width:100%;margin:10px 0;font-size:12px}
+
+/* Keep the navigation dock on the same flat teal pixel language as the play HUD. */
+.game-dock{height:70px;border:3px solid #24434b;border-radius:7px;background:#315960;box-shadow:0 4px #17373e,inset 0 0 0 2px #76a59b;padding:4px}.game-dock button,.game-dock button:first-child{border:2px solid #76a59b;border-radius:4px;background:#3f7275;box-shadow:none;color:#fff0c3}.game-dock button.selected,.game-dock button:first-child{background:#f0c978;color:#294b55;border-color:#ffe4a0}.game-dock svg{filter:none;width:34px;height:34px}.game-dock span{font-size:9px;text-shadow:1px 1px #193840}
