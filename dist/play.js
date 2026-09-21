@@ -4,7 +4,7 @@ const defaults={coins:80,berries:5,wood:0,fish:0,crystals:0,xp:0,team:['Pip'],jo
 let state=typeof SaveStore!=='undefined'?(SaveStore.read()||{...defaults}):{...defaults};if(typeof SaveStore==='undefined'){try{state={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')};}catch{}}state.cooldowns??={};
 const rates={berries:20,wood:30,fish:40,crystals:60},names={berries:'Forage berries',wood:'Gather wood',fish:'Catch fish',crystals:'Find crystals'};
 const colors={Pip:'#a4d56b',Emberkin:'#e69758',Dewdrop:'#78cccf',Lunamoth:'#b9a3de'};
-let map=worlds.valley,player={x:6*T+16,y:11*T+16,dir:3,walk:0},follower={x:player.x-24,y:player.y+15},keys={},stick={x:0,y:0},sprint=false,dialog=false,transitioning=false,near=null,encounter=null,clockTime=0,padPressed=false,padNav=0,padBack=false,toastTimer;
+let map=worlds.valley,player={x:30*T+16,y:30*T+16,dir:3,walk:0},follower={x:player.x-24,y:player.y+15},keys={},stick={x:0,y:0},sprint=false,dialog=false,transitioning=false,near=null,encounter=null,clockTime=0,padPressed=false,padNav=0,padBack=false,toastTimer;
 if(typeof ExpansionWorld!=='undefined')ExpansionWorld.apply(worlds,state.exploration||{});
 if(state.position&&worlds[state.position.area]){map=worlds[state.position.area];if(!blocked(map,state.position.x,state.position.y)){player.x=state.position.x;player.y=state.position.y;follower={x:player.x-15,y:player.y+15};}}
 function accrue(now=Date.now()){if(typeof FrontierCore!=='undefined')return FrontierCore.idle(state,now,rates);let dt=Math.max(0,Math.min(now-state.last,8*3600000));for(const n of state.team){const job=state.jobs[n];if(rates[job])state.bank[job]=(state.bank[job]||0)+dt/1000/rates[job]*state.upgrade;}state.last=now;return dt;}
@@ -51,15 +51,33 @@ if(!dialog&&!transitioning&&(typeof SaveStore==='undefined'||!SaveStore.status()
 draw();if(typeof drawActivities==='function'){drawActivities();interactionHUD();}requestAnimationFrame(frame);}
 hud();requestAnimationFrame(frame);setInterval(()=>{accrue();save();hud()},2000);if(away>60000&&bankTotal()>0)toast(`Welcome back! ${bankTotal()} supplies are waiting in your bag.`);else toast(state.met?'Adventure continued. Open Journal for your next chapter.':'Walk north into Mara’s cottage. Drag the joystick or use WASD.');
 if(document.modelContext?.registerTool){try{Promise.resolve(document.modelContext.registerTool({name:'read_valley_progress',description:'Read area, player position, nearby interaction, inventory and companions.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute(input){if(!input||Object.keys(input).length)throw new Error('Expected an empty object');return {area:map.id,player:{x:player.x,y:player.y,facing:['south','west','east','north'][player.dir]},activity:typeof activity==='undefined'||!activity?null:{type:activity.o.type,elapsed:activity.elapsed},nearby:near?.name||near?.type||null,companions:state.team,inventory:{berries:state.berries,wood:state.wood,fish:state.fish,crystals:state.crystals},chapter:state.quest+1,exploration:state.exploration||{},audio:typeof GameAudio==='undefined'?null:GameAudio.status};}})).catch(()=>{});}catch{}}
-if(typeof Image!=='undefined')setTimeout(()=>{
-// The central valley uses the supplied settlement scene and four-direction traveller frames.
-const ValleyVisuals=(()=>{const mapArt=new Image(),foreground=new Image(),directions={},friends={};let ready=false,foregroundReady=false;mapArt.onload=()=>ready=true;mapArt.src='assets/settlement/Pellet Town.png';foreground.onload=()=>foregroundReady=true;foreground.src='assets/settlement/foregroundObjects.png';for(const [name,file] of Object.entries({0:'playerUp.png',1:'playerLeft.png',2:'playerRight.png',3:'playerDown.png'})){const image=new Image();image.src='assets/settlement/'+file;directions[name]=image;}for(const [name,file] of Object.entries({Pip:'draggleSprite.png',Emberkin:'embySprite.png'})){const image=new Image();image.src='assets/settlement/'+file;friends[name]=image;}const crop={x:720,y:255,w:2110,h:1640};function background(g,x,y,w,h){if(!ready)return false;g.imageSmoothingEnabled=false;g.drawImage(mapArt,crop.x+crop.w*x/w,crop.y+crop.h*y/h,crop.w*32/w,crop.h*32/h,x,y,32,32);return true;}function canopy(g,w,h){if(!foregroundReady)return;g.save();g.imageSmoothingEnabled=false;g.drawImage(foreground,crop.x,crop.y,crop.w,crop.h,0,0,w,h);g.restore();}function traveller(g,x,y,dir,walk,height=38){const image=directions[dir];if(!image?.complete||!image.naturalWidth)return false;const frame=Math.floor((walk||0)*7)%4,sw=image.naturalWidth/4,width=Math.round(height*(sw/image.naturalHeight));g.save();g.imageSmoothingEnabled=false;g.drawImage(image,frame*sw,0,sw,image.naturalHeight,Math.round(x-width/2),Math.round(y-height),width,height);g.restore();return true;}function friend(g,name,x,y,walk,height=23){const image=friends[name];if(!image?.complete||!image.naturalWidth)return false;const frame=Math.floor((walk||0)*6)%4,sw=image.naturalWidth/4,width=Math.round(height*(sw/image.naturalHeight));g.save();g.imageSmoothingEnabled=false;g.drawImage(image,frame*sw,0,sw,image.naturalHeight,Math.round(x-width/2),Math.round(y-height),width,height);g.restore();return true;}return {background,canopy,traveller,friend,get ready(){return ready;}};})();
-const settlementGround=ground;ground=function(x,y,t){if(map.id==='valley'&&ValleyVisuals.background(ctx,x*T,y*T,map.w*T,map.h*T))return;settlementGround(x,y,t);};
-const settlementObject=object;object=function(o){if(map.id==='valley'&&['house','tree'].includes(o.type))return;settlementObject(o);};
-const settlementHuman=human;human=function(x,y,npc=false,dir=0,walk=0){if(!npc&&ValleyVisuals.traveller(ctx,x,y,dir,walk,38))return;settlementHuman(x,y,npc,dir,walk);};
-const settlementCreature=creature;creature=function(x,y,name,walk=0){if(map.id==='valley'&&ValleyVisuals.friend(ctx,name,x,y,walk,23))return;settlementCreature(x,y,name,walk);};
-const settlementDraw=draw;draw=function(){settlementDraw();if(map.id==='valley'&&ValleyVisuals.ready){ctx.save();ctx.translate(-Math.floor(camera.x),-Math.floor(camera.y));ValleyVisuals.canopy(ctx,map.w*T,map.h*T);ctx.restore();}};
-},0);
+// Willowmere is rendered as the supplied 70 x 40 settlement map at the same
+// grid scale used by its collision layer. It is a complete scene, never an
+// overlay applied to a different world.
+if(typeof Image!=='undefined'){
+ const SettlementVisuals=(()=>{
+  const load=file=>{const image=new Image();image.src='assets/settlement/'+file;return image;};
+  const background=load('Pellet Town.png'),foreground=load('foregroundObjects.png');
+  const players=[load('playerUp.png'),load('playerLeft.png'),load('playerRight.png'),load('playerDown.png')];
+  const friends={Pip:load('draggleSprite.png'),Emberkin:load('embySprite.png')};
+  const people=[load('old-man.png'),load('villager.png')];
+  function sprite(image,x,y,walk,height){if(!image.complete||!image.naturalWidth)return false;const sw=image.naturalWidth/4,w=Math.round(height*sw/image.naturalHeight),frame=Math.floor(walk*7)%4;ctx.drawImage(image,frame*sw,0,sw,image.naturalHeight,Math.round(x-w/2),Math.round(y-height),w,height);return true;}
+  return {background,foreground,sprite,players,friends,people,ready:()=>background.complete&&background.naturalWidth>0};
+ })();
+ const baseDraw=draw;
+ draw=function(){
+  if(!map.settlement||!SettlementVisuals.ready()){baseDraw();return;}
+  camera.x=Math.max(0,Math.min(map.w*T-W,player.x-W/2));
+  camera.y=Math.max(0,Math.min(map.h*T-H,player.y-H/2));
+  ctx.clearRect(0,0,W,H);ctx.save();ctx.imageSmoothingEnabled=false;ctx.translate(-Math.floor(camera.x),-Math.floor(camera.y));
+  ctx.drawImage(SettlementVisuals.background,0,0,map.w*T,map.h*T);
+  const people=map.npcs.map((n,i)=>({y:n.y,draw:()=>SettlementVisuals.sprite(SettlementVisuals.people[i%SettlementVisuals.people.length],n.x,n.y,clockTime*.6,38)}));
+  people.push({y:follower.y,draw:()=>SettlementVisuals.sprite(SettlementVisuals.friends[state.life?.active||'Pip']||SettlementVisuals.friends.Pip,follower.x,follower.y,player.walk,25)});
+  people.push({y:player.y,draw:()=>SettlementVisuals.sprite(SettlementVisuals.players[player.dir]||SettlementVisuals.players[3],player.x,player.y,player.walk,42)});
+  people.sort((a,b)=>a.y-b.y).forEach(item=>item.draw());
+  ctx.drawImage(SettlementVisuals.foreground,0,0,map.w*T,map.h*T);ctx.restore();drawMini();
+ };
+}
 
 
 
