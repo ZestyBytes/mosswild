@@ -16,7 +16,7 @@ Move with WASD/arrows, the touch joystick, or a standard gamepad. E/Space or con
 
 - Thirteen connected areas, including Bramble Orchard, Copper Highlands, Fernwater Marsh, Tideglass Coast and Starlight Plateau. Original areas: valley, meadow, grove, two interiors, riverbank and cavern. Repair the bridge with Emberkin and 12 wood; ask Lunamoth to open the cavern; spend five crystals to restore its beacon.
 - Eight journal chapters with single-use rewards, Mara's guidance, Nell's fish request and a hidden supplies chest.
-- Five companions, including the hidden orchard companion Bramble. Select a travelling companion from Friends. Gathering grants 12 bond XP; treats grant 50. Every 100 XP earns a level, capped at 10. Level 2 adds one item for the companion's speciality.
+- Nine companions across the valley and five frontier regions. Select a travelling companion from Friends. Gathering grants 12 bond XP; treats grant 50. Every 100 XP earns a level, capped at 10. Level 2 adds one item for the companion's speciality.
 - Six growing beds south of the homestead: sun turnips take 90 seconds and moon beans take three minutes. Watering reduces growing time by 35%; rain waters planted crops. Plants mature while away. Harvest at the bed, then craft inside the homestead.
 - Workbench recipes for friendship treats, two seed types, tools (+1 gathered item) and a lantern. Camp upgrades improve companion idle jobs.
 - A 12-minute day cycle, rain every third day, night lighting and simple time/weather-based routines for Mara and Nell.
@@ -60,3 +60,7 @@ Travel west from Willowmere, then follow the northern bend to Tessa’s cottage.
 The orchard has a stream with two crossings, winding paths, apple trees, flower patches, an enterable cottage and three nursery appearances. Tessa, Bramble, the cottage, apple trees, well and nursery share the rounded-pixel art direction. Bramble joins normal companion jobs, expeditions and bonding; at level 2 it adds one wild herb while travelling. Other regions retain their current artwork.
 
 Run `node qa-orchard.cjs` for disposable local browser fixtures on port 4176. The named scene URLs seed this isolated test origin; they never affect the live game. Do not deploy that server.
+
+## Art collection
+
+Preview and download the prepared player, companion, NPC, terrain and landmark sheets at artbook.html. See docs/ART-ASSETS.md for frame sizes and rendering details.
